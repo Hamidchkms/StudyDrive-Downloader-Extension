@@ -68,7 +68,14 @@
             if (!fileNameMatch) {
                 return "preview.pdf";
             }
-            return JSON.parse(fileNameMatch[1]);
+            let fileName = JSON.parse(fileNameMatch[1]);
+
+            // this removes file extension docx and adds pdf file extension.
+            if (fileName.endsWith('.docx')) {
+                fileName = fileName.slice(0, -5) + '.pdf';
+            }
+
+            return fileName;
         }
 
         function downloadFile(blob, fileName) {
