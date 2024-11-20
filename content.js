@@ -44,7 +44,7 @@
 
             const parsedLink = getDownloadLink(html);
             if (!parsedLink) {
-                console.error('[StudyDrive Download] Download link not found', html);
+                console.error('[StudyDrive Download] Download link not found');
                 return;
             }
 
