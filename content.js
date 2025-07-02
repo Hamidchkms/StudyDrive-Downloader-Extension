@@ -44,11 +44,15 @@
 
             const parsedLink = getDownloadLink(html);
             if (!parsedLink) {
-                console.error('[StudyDrive Download] Download link not found', html);
+                console.error('[StudyDrive Download] Download link not found');
                 return;
             }
 
             const fileName = getFileName(html);
+            if (!fileName) {
+                console.error('[StudyDrive Download] File Extension not supported');
+                return;
+            }
 
             const downloadResult = await fetch(parsedLink);
             const blob = await downloadResult.blob();
@@ -68,7 +72,19 @@
             if (!fileNameMatch) {
                 return "preview.pdf";
             }
-            return JSON.parse(fileNameMatch[1]);
+            let fileName = JSON.parse(fileNameMatch[1]);
+
+            // this removes file extension docx and adds pdf file extension.
+            if (fileName.endsWith('.docx')) {
+                fileName = fileName.slice(0, -5) + '.pdf';
+            }
+
+            // this is to ensure only pdfs are downloaded.
+            if (!fileName.endsWith('.pdf')) {
+                return null;
+            }
+
+            return fileName;
         }
 
         function downloadFile(blob, fileName) {
