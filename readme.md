@@ -1,41 +1,55 @@
-# StudyDrive Downloader for free without premium⭐
-# Installation Guide for StudyDrive Downloader Extension
+# StudyDrive Downloader Extension
 
-This Chrome extension allows you to download documents from StudyDrive.
+Download a StudyDrive document's available PDF preview from the browser's right-click menu or the extension's toolbar icon. This fork replaces the injected page button with browser controls, so it no longer recreates a button that the website removes.
 
-## Installation Steps
+## Installation
 
-1. **Download the Extension**
+1. On [this repository](https://github.com/Meminn/StudyDrive-Downloader-Extension), select **Code → Download ZIP** and extract the archive.
+2. Open `edge://extensions` in Microsoft Edge or `chrome://extensions` in Google Chrome.
+3. Enable **Developer mode**.
+4. Select **Load unpacked** and choose the extracted folder containing `manifest.json`.
 
-    ![1](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/a2700f84-cd81-4e47-8b18-207d25fac2cc)
-   
-![2](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/527ec4d1-90b2-4b9a-ae53-3df9c48c0833)
+The right-click download flow has been manually verified in Microsoft Edge. This version has not been manually tested in Chrome.
 
+## Download a document
 
-3. **Extract the ZIP Archive**
+1. Open a StudyDrive document page, such as `https://www.studydrive.net/en/doc/...`.
+2. Right-click the page and select **Download StudyDrive document**. If the PDF viewer shows its own menu, right-click outside the viewer.
+3. Alternatively, click the extension's icon in the browser toolbar. You can pin it from the browser's Extensions menu.
 
+<img src="docs/download-context-menu.png" alt="Browser right-click menu showing Download StudyDrive document; unrelated entries are blurred" width="360">
 
-    Extract the downloaded ZIP archive into a folder of your choice.
-![3](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/1157cf2c-3d96-432e-b9ea-967745e21f3c)
+*Unrelated menu entries are obscured in this edited screenshot.*
 
-4. **Install the Extension**
+There is no floating page button, automatic download, or button-recreation loop. Both browser controls run the same downloader when clicked.
 
-    - Open Google Chrome.
-    - Go to the extension settings by clicking the three-dot menu in the top-right corner of the browser, then selecting "More Tools" > "Extensions". or ![4](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/614fd76e-28d6-49e4-88c1-e4d956e4227a)
+## Updating an existing installation
 
-    - Enable developer mode (top right).
-    - Click on "Load Unpacked" and select the folder where you extracted the extension.
-![5](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/05b39353-2380-4f89-8e96-706e6ff91d43)
-![7](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/bd577211-d9ff-4b37-adc8-1372fd8cd0a2)
+Replace the extension files, click **Reload** on its card in `edge://extensions` or `chrome://extensions`, then close the old StudyDrive tab and open the document in a new tab. This clears stale extension contexts left behind by earlier versions.
 
-5. **Using the Extension**
+## Limitations and errors
 
-    - Open any page on StudyDrive where a document is located.
-    - Click on the newly added download icon to download the document.
-![8](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension/assets/85966772/72cb1286-977a-44eb-99f9-9bd9b16cfd61)
+- The downloader still uses the `file_preview` link exposed in the document page's HTML. If that field is missing or the request fails, it displays an error; switching to a context menu does not change which files are available.
+- PDF previews are supported. A `.docx` filename is saved with a `.pdf` extension for its PDF preview; other filename extensions are rejected.
+- If the toolbar icon shows **ERR**, hover over it for the error message. Make sure the active tab is a StudyDrive document page.
 
-That's it! The extension is now installed and ready to use.
+## Permissions
 
----
+- `activeTab`: temporary access to the tab when you invoke the downloader.
+- `contextMenus`: adds the right-click download item.
+- `scripting`: runs the downloader in the selected document tab on demand.
 
-**Note:** This extension has only been tested for use in Google Chrome.
+No persistent host access or third-party dependencies are required. The legacy popup files are retained but are no longer used.
+
+## Development
+
+No build step is required. Basic syntax checks:
+
+```sh
+node --check background.js
+node --check content.js
+```
+
+After changing files, reload the unpacked extension and test in a fresh document tab.
+
+Based on [Hamidchkms/StudyDrive-Downloader-Extension](https://github.com/Hamidchkms/StudyDrive-Downloader-Extension).
